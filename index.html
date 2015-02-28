@@ -23,13 +23,8 @@
 
             <h2>Volunteers</h2>
 
-            <div id="volunteer-search">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label for="search-box">Name</label>
-                        <input type="text" id="search-box" class="form-control" />
-                    </div>
-                </form>
+            <div id="volunteers-search">
+
             </div>
 
             <table class="table table-striped table-bordered records-list">
@@ -69,6 +64,17 @@
         </td>
         </script>
 
+        <script type="text/template" id="filter-t">
+        <div>
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="search-box"><%= field_name %></label>
+                    <input type="text" id="search-box" class="form-control" />
+                </div>
+            </form>
+        </div>
+        </script>
+
         <!-- external libraries -->
         <script src="/lib/jquery-2.1.3.min.js"></script>
         <script src="/lib/bootstrap.min.js"></script>
@@ -76,23 +82,40 @@
         <script src="/lib/backbone-min.js"></script>
 
         <!-- townsquare javascript -->
+        <script src="/js/events.js"></script>
         <script src="/js/townsquarecollection.js"></script>
 
         <script src="/js/user.js"></script>
         <script src="/js/users.js"></script>
         <script src="/js/userrow.js"></script>
         <script src="/js/usertable.js"></script>
+        <script src="/js/filter.js"></script>
+        <script src="/js/filterinput.js"></script>
 
         <script>
 
+        var volunteer_filter_attributes = new townsquare_admin.
+            models.FilterAttributes({field_name: 'Name'});
+
+        var volunteer_filter_view = new townsquare_admin.views.FilterView({
+            model: volunteer_filter_attributes,
+            el: '#volunteers-search'
+        });
+        volunteer_filter_view.render();
+
         var all_users = new townsquare_admin.collections.Users();
+
+        var users_table = new townsquare_admin.views.UserTable({
+            collection: all_users,
+            el: '#volunteers'
+
+        });
+
+        var filterer = new townsquare_admin.TableFilterer(volunteer_filter_view, users_table);
+        townsquare_admin.events.trigger('filtering');
+
         all_users.fetch({success: function() {
 
-            var users_table = new townsquare_admin.views.UserTable({
-                collection: all_users,
-                el: '#volunteers'
-
-            });
 
             users_table.render();
         }})
