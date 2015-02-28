@@ -9,10 +9,27 @@ class FilterAttributes extends Backbone.Model
 
 
 class TableFilterer
-    constructor: (@filter_view, @table_view) ->
-        exports.townsquare_admin.events.on('filtering', (event_name) ->
-            console.log('Filtering')
+    constructor: (@table) ->
+        exports.townsquare_admin.events.on('filtering', @filter)
+        exports.townsquare_admin.events.on('filtering-clear', @clear);
+
+    filter: (view) =>
+        input = $(view.$el).find('#search-box')
+        term = input.val()
+        input.val('')
+
+        unwanted = @table.collection.filter((m) ->
+            m.get('first_name') != term
         )
+
+        @table.collection.remove(unwanted)
+        @table.render()
+
+    clear: (view) =>
+        @table.collection.fetch({success: () =>
+            @table.render()
+        })
+
 
 
 exports.townsquare_admin.models.FilterAttributes = FilterAttributes

@@ -10,5 +10,14 @@ class FilterView extends Backbone.View
         @$el.html(@template(@model.attributes))
 
         @
+    events:
+        'click .filter-btn': 'filterPressed'
+        'click .filter-clear': 'clearPressed'
+
+    filterPressed: () ->
+        exports.townsquare_admin.events.trigger('filtering', @);
+
+    clearPressed: () ->
+        exports.townsquare_admin.events.trigger('filtering-clear', @);
 
 exports.townsquare_admin.views.FilterView = FilterView

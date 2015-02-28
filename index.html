@@ -72,6 +72,8 @@
                     <input type="text" id="search-box" class="form-control" />
                 </div>
             </form>
+            <button class="btn filter-btn">Search</button>
+            <button class="btn filter-clear">Clear</button>
         </div>
         </script>
 
@@ -101,6 +103,7 @@
             model: volunteer_filter_attributes,
             el: '#volunteers-search'
         });
+
         volunteer_filter_view.render();
 
         var all_users = new townsquare_admin.collections.Users();
@@ -111,12 +114,11 @@
 
         });
 
-        var filterer = new townsquare_admin.TableFilterer(volunteer_filter_view, users_table);
-        townsquare_admin.events.trigger('filtering');
+        var filterer = new townsquare_admin.TableFilterer(
+            users_table
+        );
 
         all_users.fetch({success: function() {
-
-
             users_table.render();
         }})
 

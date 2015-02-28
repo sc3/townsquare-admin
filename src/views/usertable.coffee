@@ -6,6 +6,9 @@ exports.townsquare_admin.views = {} if not exports.townsquare_admin.views?
 
 class UserTable extends Backbone.View
     render: ->
+
+        @$el.html('')
+
         @collection.each((u) =>
             user_row = new townsquare_admin.views.UserRow({model: u})
             @$el.append(user_row.render().el)
