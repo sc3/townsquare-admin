@@ -19,17 +19,17 @@ class TableFilterer
         input.val('')
 
         unwanted = @table.collection.filter((m) ->
-            m.get('first_name') != term
+            !s.startsWith(m.name(), term)
         )
 
         @table.collection.remove(unwanted)
         @table.render()
 
     clear: (view) =>
+
         @table.collection.fetch({success: () =>
             @table.render()
         })
-
 
 
 exports.townsquare_admin.models.FilterAttributes = FilterAttributes
